@@ -102,11 +102,9 @@ int main(void) {
         cvs->inputs->t = (end.tv_sec - start.tv_sec) + (double) (end.tv_nsec - start.tv_nsec) / BILLION;
         
         // Position
-        //update_odometry(cvs);
-        //update_robotPosition(cvs);
+        update_robotPosition(cvs);
 
         //controller_loop(cvs);
-        speed_regulation(cvs, -0.2, -1, -1);
         //printf("w1: %f, w2: %f, w3: %f, w4: %f\n", cvs->inputs->wheel_speeds[W1], cvs->inputs->wheel_speeds[W2], cvs->inputs->wheel_speeds[W3],cvs->inputs->wheel_speeds[W4]);
 
 /*

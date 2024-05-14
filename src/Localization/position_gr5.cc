@@ -25,6 +25,8 @@ void update_robotPosition(CtrlStruct *cvs)
     t = inputs->t;
     last_t = cvs->position->last_t;
 
+    update_odometry(cvs);
+
     switch (cvs->position->flagRotation)
     {
     case 0:
