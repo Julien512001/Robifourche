@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <math.h>
 
-FILE *fp_control; // File pointer for writing data
+
 
 /*! \brief initialize controller operations (called once)
  *
@@ -71,7 +71,7 @@ void controller_loop(CtrlStruct *cvs)
   switch (cvs->main_state) {
 
     case RUN_STATE:
-        /*
+        
         
         if (cvs->inputs->t >= 0.0){
           vitesseX = 0.2;
@@ -95,8 +95,8 @@ void controller_loop(CtrlStruct *cvs)
         }
         
         
-        speed_regulation(cvs, vitesseX, vitesseY, vitesseZ);*/
-        //speed_regulation(cvs, 0.0, 0.0, 0.0);
+        speed_regulation(cvs, vitesseX, vitesseY, vitesseZ);
+        //speed_regulation(cvs, -1, -1, -1);
       
         
         //speed_regulation(cvs, 0.2, -1, -1);
@@ -106,17 +106,7 @@ void controller_loop(CtrlStruct *cvs)
           cvs->main_state = STOP_END_STATE;
         }
         */
-        /*
-        fp_control = fopen("../S13_closeloop2roue.txt", "a");
-        if (fp_control == NULL) {
-          perror("Erreur lors de l'ouverture du fichier");
-          // Ou utilisez errno pour obtenir le code d'erreur spécifique
-          // printf("Erreur lors de l'ouverture du fichier : %d\n", errno);
-        }
-        else{
-          fprintf(fp_control,"control1 : %f, %f\n", cvs->inputs->wheel_speeds[W2], cvs->outputs->wheel_commands[W2]);
-          fclose(fp_control);
-        }*/
+        
         
     /*
         if (Avoidance(cvs)) {
@@ -135,7 +125,7 @@ void controller_loop(CtrlStruct *cvs)
         // speed_regulation(cvs, 0.0, -0.2, -1);
         //Opposite_base_Strat(cvs);
 
-
+        /*
         EntonnoirOUT(cvs);
         CtrlActuators(cvs);
 
@@ -177,7 +167,7 @@ void controller_loop(CtrlStruct *cvs)
 
         sleep(4);
 
-
+        */
 
         //FourcheEnBas(cvs);
         /*
@@ -226,7 +216,7 @@ void controller_loop(CtrlStruct *cvs)
         printf("Sonar 0 : %f,Sonar 1 : %f,Sonar 2 : %f\n",cvs->inputs->sonars[FRONT],
          cvs->inputs->sonars[LEFT1], cvs->inputs->sonars[RIGHT]);
         */
-        cvs->main_state = STOP_END_STATE;
+        //cvs->main_state = STOP_END_STATE;
         break;
 
     case BACK_HOME_STATE:

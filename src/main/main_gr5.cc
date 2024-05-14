@@ -24,6 +24,8 @@ FILE *fp4;
 FILE *fp5;
 FILE *fp6;
 
+FILE *fp_control; // File pointer for writing data for low level
+
 #define BILLION 1000000000L
 
 int main(void) {
@@ -101,10 +103,24 @@ int main(void) {
         clock_gettime(CLOCK_MONOTONIC, &end);
         cvs->inputs->t = (end.tv_sec - start.tv_sec) + (double) (end.tv_nsec - start.tv_nsec) / BILLION;
         
+        // Graph Low Level
+
+        
+        fp_control = fopen("../Mercredi2.txt", "a");
+        if (fp_control == NULL) {
+          perror("Erreur lors de l'ouverture du fichier");
+          // Ou utilisez errno pour obtenir le code d'erreur spécifique
+          // printf("Erreur lors de l'ouverture du fichier : %d\n", errno);
+        }
+        else{
+          fprintf(fp_control,"control1 : %f, %f, %f\n", cvs->inputs->wheel_speeds[W2], cvs->outputs->wheel_commands[W2], cvs->inputs->t);
+          fclose(fp_control);
+        }
+
         // Position
         update_robotPosition(cvs);
 
-        //controller_loop(cvs);
+        controller_loop(cvs);
         //printf("w1: %f, w2: %f, w3: %f, w4: %f\n", cvs->inputs->wheel_speeds[W1], cvs->inputs->wheel_speeds[W2], cvs->inputs->wheel_speeds[W3],cvs->inputs->wheel_speeds[W4]);
 
 /*
