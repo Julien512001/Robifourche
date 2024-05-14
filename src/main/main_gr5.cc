@@ -106,8 +106,8 @@ int main(void) {
         //update_robotPosition(cvs);
 
         //controller_loop(cvs);
-
-        printf("w1: %f, w2: %f, w3: %f, w4: %f\n", cvs->inputs->wheel_speeds[W1], cvs->inputs->wheel_speeds[W2], cvs->inputs->wheel_speeds[W3],cvs->inputs->wheel_speeds[W4]);
+        speed_regulation(cvs, -0.2, -1, -1);
+        //printf("w1: %f, w2: %f, w3: %f, w4: %f\n", cvs->inputs->wheel_speeds[W1], cvs->inputs->wheel_speeds[W2], cvs->inputs->wheel_speeds[W3],cvs->inputs->wheel_speeds[W4]);
 
 /*
         // time LCD

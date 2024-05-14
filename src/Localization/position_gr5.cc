@@ -29,17 +29,19 @@ void update_robotPosition(CtrlStruct *cvs)
     {
     case 0:
         if (cvs->position->flagUpdate) {
-        double xR = cvs->lidar->x;
-        double yR = cvs->lidar->y;
-        double thetaR = cvs->lidar->theta;
+            double xR = cvs->lidar->x;
+            double yR = cvs->lidar->y;
+            double thetaR = cvs->lidar->theta;
 
-        cvs->rob_pos->x = xR;
-        cvs->rob_pos->y = yR;
-        cvs->rob_pos->theta = thetaR;
+            
 
-        cvs->odometry->x = xR;
-        cvs->odometry->y = yR;
-        cvs->odometry->theta = thetaR;
+            cvs->rob_pos->x = xR;
+            cvs->rob_pos->y = yR;
+            cvs->rob_pos->theta = thetaR;
+
+            cvs->odometry->x = xR;
+            cvs->odometry->y = yR;
+            cvs->odometry->theta = thetaR;
         }
         
         cvs->rob_pos->x = cvs->odometry->x;
