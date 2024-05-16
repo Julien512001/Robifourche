@@ -57,7 +57,7 @@ CtrlStruct* init_CtrlStruct(CtrlIn *inputs, CtrlOut *outputs)
 	cvs->aruco->thetaR = 0.0;
 
 	// states
-	cvs->main_state = RUN_STATE;
+	cvs->main_state = 0;
 	
 	// IDs
 	cvs->robot_id = ROBOT_B;
@@ -153,7 +153,7 @@ CtrlStruct* init_CtrlStruct(CtrlIn *inputs, CtrlOut *outputs)
 
 	//Actuator
 	cvs->actuator = (Actuator*) malloc(sizeof(Actuator));
-	cvs->actuator->message_array = (uint32_t*) calloc(14,sizeof(uint32_t));
+	cvs->actuator->message_array = (uint32_t*) calloc(20,sizeof(uint32_t));
 
 	return cvs;
 }

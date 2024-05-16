@@ -8,25 +8,27 @@ typedef struct Actuator{
     uint32_t *message_array;
 } Actuator;
 
-void CtrlActuators(CtrlStruct *cvs);
+void RunActuators(CtrlStruct *cvs);
 
 void ResetActuator(CtrlStruct *cvs);
 
-void SortirBlocFourche(CtrlStruct *cvs);
+void ParralaxOut(CtrlStruct *cvs);
 
-void RentrerBlocFourche(CtrlStruct *cvs);
+void ParralaxIn(CtrlStruct *cvs);
 
-void StopBlocFourche(CtrlStruct *cvs);
+void ParralaxStop(CtrlStruct *cvs);
 
-void FourcheEnHaut(CtrlStruct *cvs);
+void DSSForkUp(CtrlStruct *cvs);
 
-void FourcheEnBas(CtrlStruct *cvs);
+void DSSForkMid(CtrlStruct *cvs);
 
-void FeuilleOUT(CtrlStruct *cvs);
+void DSSForkDown(CtrlStruct *cvs);
 
-void FeuilleIN(CtrlStruct *cvs);
+void FeetechOut(CtrlStruct *cvs);
 
-void FeuilleSTOP(CtrlStruct *cvs);
+void FeetechIn(CtrlStruct *cvs);
+
+void FeetechStop(CtrlStruct *cvs);
 
 void EntonnoirOUT(CtrlStruct *cvs);
 
@@ -34,29 +36,35 @@ void EntonnoirIN(CtrlStruct *cvs);
 
 void EntonnoirSTOP(CtrlStruct *cvs);
 
-void BrasEntonnoirFermé(CtrlStruct *cvs);
+void EntonnoirBrasFerme(CtrlStruct *cvs);
 
-void BrasEntonnoirOuvert(CtrlStruct *cvs);
+void EntonnoirBrasOuvert(CtrlStruct *cvs);
 
-void BrasEntonnoirMiddle(CtrlStruct *cvs);
+void EntonnoirBrasMiddle(CtrlStruct *cvs);
 
-void BrasEntonnoirSeq(CtrlStruct *cvs);
+void EntonnoirBrasSeq(CtrlStruct *cvs);
 
-void BrasPanneauEnHaut(CtrlStruct *cvs);
+void DSSPanelUp(CtrlStruct *cvs);
 
-void BrasPanneauEnBas(CtrlStruct *cvs);
+void DSSPanelMid(CtrlStruct *cvs);
 
-void RouePanneauBleu(CtrlStruct *cvs);
+void DSSPanelDown(CtrlStruct *cvs);
 
-void RouePanneauJaune(CtrlStruct *cvs);
+void PanelWheelYellow(CtrlStruct *cvs);
 
-void RouePanneauSTOP(CtrlStruct *cvs);
+void PanelWheelBleu(CtrlStruct *cvs);
 
-void TapisRentrant(CtrlStruct *cvs);
+void PanelWheelStop(CtrlStruct *cvs);
 
-void TapisRentrant_Pot(CtrlStruct *cvs);
+void PanelBrasUp(CtrlStruct *cvs);
 
-void TapisSortant(CtrlStruct *cvs);
+void PanelBrasDown(CtrlStruct *cvs);
+
+void TapisIn(CtrlStruct *cvs);
+
+void TapisIn_Pot(CtrlStruct *cvs);
+
+void TapisOut(CtrlStruct *cvs);
 
 void TapisStop(CtrlStruct *cvs);
 

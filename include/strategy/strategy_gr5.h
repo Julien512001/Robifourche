@@ -14,7 +14,7 @@
 #include <math.h>
 
 // strategy main states
-enum {STRAT_STATE_1, STRAT_STATE_2, STRAT_STATE_3, STRAT_STATE_4, STRAT_STATE_5, STRAT_STATE_6, STRAT_STATE_7, STRAT_STATE_8, STRAT_STATE_9};
+enum {STRAT_STATE_1, STRAT_STATE_2, STRAT_STATE_3, STRAT_STATE_4, STRAT_STATE_5, STRAT_STATE_6, STRAT_STATE_7, STRAT_STATE_8, STRAT_STATE_9, STRAT_STATE_10, STRAT_STATE_11, STRAT_STATE_12, STRAT_STATE_13, STRAT_STATE_14, STRAT_STATE_15, STRAT_STATE_16, STRAT_STATE_17, STRAT_STATE_18, STRAT_STATE_19, STRAT_STATE_20, STRAT_STATE_21};
 
 /// strategy
 typedef struct Strategy
@@ -33,7 +33,7 @@ void FSM_PrepInTake_Plant(CtrlStruct *cvs);
 
 void FSM_StopPrepInTake_Plant(CtrlStruct *cvs);
 
-void Take_Plant(CtrlStruct *cvs);
+void FSM_Take_Plant(CtrlStruct *cvs);
 
 void takeOff_Plant(CtrlStruct *cvs);
 
@@ -43,14 +43,14 @@ void FSM_PrepDropPlantGarden(CtrlStruct *cvs);
 
 void FSM_DropPlantGarden(CtrlStruct *cvs);
 
-void FSM_MouvPrisePlantes(CtrlStruct *cvs);
+void FSM_Take_Pot_v1(CtrlStruct *cvs);
+
+void FSM_Take_Pot_v2(CtrlStruct *cvs);
 
 // function prototype
 void main_strategy(CtrlStruct *cvs);
 
 void main_strategy_sonar(CtrlStruct *cvs);
-
-void panel_strategy(CtrlStruct *cvs);
 
 void stratLidar(CtrlStruct *cvs);
 

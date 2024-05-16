@@ -2,138 +2,160 @@
 #include <math.h>
 
 
-void CtrlActuators(CtrlStruct *cvs)
+void RunActuators(CtrlStruct *cvs)
 {
     CtrlIn *inputs;
     uint32_t *message = cvs->actuator->message_array;
     inputs = cvs->inputs;
     uint32_t result = 0;
-    for (int i = 0; i<14; i++){
+    for (int i = 0; i<20; i++){
         result += message[i]*pow(2,i);
     }
     send_spi(cvs, result, 0);
 }
 
 void ResetActuator(CtrlStruct *cvs){
-    for (int i = 0; i<14;i++){
+    for (int i = 0; i<20;i++){
         cvs->actuator->message_array[i] = 0;
     }
 }
 
-void SortirBlocFourche(CtrlStruct *cvs){
+void ParralaxOut(CtrlStruct *cvs){
     cvs->actuator->message_array[0] = 1;
     cvs->actuator->message_array[1] = 0;
 }
 
-void RentrerBlocFourche(CtrlStruct *cvs){
+void ParralaxIn(CtrlStruct *cvs){
     cvs->actuator->message_array[0] = 0;
     cvs->actuator->message_array[1] = 1;
 }
 
-void StopBlocFourche(CtrlStruct *cvs){
+void ParralaxStop(CtrlStruct *cvs){
     cvs->actuator->message_array[0] = 0;
     cvs->actuator->message_array[1] = 0;
 }
 
-void FourcheEnHaut(CtrlStruct *cvs){
+void DSSForkUp(CtrlStruct *cvs){
     cvs->actuator->message_array[2] = 1;
+    cvs->actuator->message_array[3] = 0;
 }
 
-void FourcheEnBas(CtrlStruct *cvs){
+void DSSForkMid(CtrlStruct *cvs){
     cvs->actuator->message_array[2] = 0;
-}
-
-void FeuilleOUT(CtrlStruct *cvs){
     cvs->actuator->message_array[3] = 1;
-    cvs->actuator->message_array[4] = 0;
 }
 
-void FeuilleIN(CtrlStruct *cvs){
+void DSSForkDown(CtrlStruct *cvs){
+    cvs->actuator->message_array[2] = 0;
     cvs->actuator->message_array[3] = 0;
+}
+
+void FeetechOut(CtrlStruct *cvs){
     cvs->actuator->message_array[4] = 1;
+    cvs->actuator->message_array[5] = 0;
 }
 
-void FeuilleSTOP(CtrlStruct *cvs){
-    cvs->actuator->message_array[3] = 0;
+void FeetechIn(CtrlStruct *cvs){
     cvs->actuator->message_array[4] = 0;
+    cvs->actuator->message_array[5] = 1;
+}
+
+void FeetechStop(CtrlStruct *cvs){
+    cvs->actuator->message_array[4] = 0;
+    cvs->actuator->message_array[5] = 0;
 }
 
 void EntonnoirOUT(CtrlStruct *cvs){
-    cvs->actuator->message_array[5] = 1;
-    cvs->actuator->message_array[6] = 0;
+    cvs->actuator->message_array[6] = 1;
+    cvs->actuator->message_array[7] = 0;
 }
 
 void EntonnoirIN(CtrlStruct *cvs){
-    cvs->actuator->message_array[5] = 0;
-    cvs->actuator->message_array[6] = 1;
+    cvs->actuator->message_array[6] = 0;
+    cvs->actuator->message_array[7] = 1;
 }
 
 void EntonnoirSTOP(CtrlStruct *cvs){
-    cvs->actuator->message_array[5] = 0;
     cvs->actuator->message_array[6] = 0;
-}
-
-void BrasEntonnoirFermé(CtrlStruct *cvs){
-    cvs->actuator->message_array[7] = 1;
-    cvs->actuator->message_array[8] = 0;
-}
-
-void BrasEntonnoirOuvert(CtrlStruct *cvs){
     cvs->actuator->message_array[7] = 0;
+}
+
+void EntonnoirBrasFerme(CtrlStruct *cvs){
     cvs->actuator->message_array[8] = 1;
-}
-
-void BrasEntonnoirMiddle(CtrlStruct *cvs){
-    cvs->actuator->message_array[7] = 0;
-    cvs->actuator->message_array[8] = 0;
-}
-
-void BrasEntonnoirSeq(CtrlStruct *cvs){
-    cvs->actuator->message_array[7] = 1;
-    cvs->actuator->message_array[8] = 1;
-}
-
-void BrasPanneauEnHaut(CtrlStruct *cvs){
     cvs->actuator->message_array[9] = 0;
 }
 
-void BrasPanneauEnBas(CtrlStruct *cvs){
+void EntonnoirBrasOuvert(CtrlStruct *cvs){
+    cvs->actuator->message_array[8] = 0;
     cvs->actuator->message_array[9] = 1;
 }
 
-void RouePanneauBleu(CtrlStruct *cvs){
+void EntonnoirBrasMiddle(CtrlStruct *cvs){
+    cvs->actuator->message_array[8] = 0;
+    cvs->actuator->message_array[9] = 0;
+}
+
+void EntonnoirBrasSeq(CtrlStruct *cvs){
+    cvs->actuator->message_array[8] = 1;
+    cvs->actuator->message_array[9] = 1;
+}
+
+void DSSPanelUp(CtrlStruct *cvs){
+    cvs->actuator->message_array[10] = 0;
+    cvs->actuator->message_array[11] = 0;
+}
+
+void DSSPanelDown(CtrlStruct *cvs){
     cvs->actuator->message_array[10] = 1;
     cvs->actuator->message_array[11] = 0;
 }
 
-void RouePanneauJaune(CtrlStruct *cvs){
+void DSSPanelMid(CtrlStruct *cvs){
     cvs->actuator->message_array[10] = 0;
     cvs->actuator->message_array[11] = 1;
 }
 
-void RouePanneauSTOP(CtrlStruct *cvs){
-    cvs->actuator->message_array[10] = 0;
-    cvs->actuator->message_array[11] = 0;
-}
-
-void TapisRentrant(CtrlStruct *cvs){
+void PanelWheelYellow(CtrlStruct *cvs){
     cvs->actuator->message_array[12] = 1;
     cvs->actuator->message_array[13] = 0;
 }
 
-void TapisRentrant_Pot(CtrlStruct *cvs){
+void PanelWheelBleu(CtrlStruct *cvs){
     cvs->actuator->message_array[12] = 0;
     cvs->actuator->message_array[13] = 1;
 }
 
-void TapisSortant(CtrlStruct *cvs){
-    cvs->actuator->message_array[12] = 1;
-    cvs->actuator->message_array[13] = 1;
+void PanelWheelStop(CtrlStruct *cvs){
+    cvs->actuator->message_array[12] = 0;
+    cvs->actuator->message_array[13] = 0;
+}
+
+void PanelBrasUp(CtrlStruct *cvs){
+    cvs->actuator->message_array[14] = 0;
+}
+
+void PanelBrasDown(CtrlStruct *cvs){
+    cvs->actuator->message_array[14] = 1;
+}
+
+void TapisIn(CtrlStruct *cvs){
+    cvs->actuator->message_array[15] = 1;
+    cvs->actuator->message_array[16] = 0;
+}
+
+void TapisIn_Pot(CtrlStruct *cvs){
+    cvs->actuator->message_array[15] = 0;
+    cvs->actuator->message_array[16] = 1;
+}
+
+void TapisOut(CtrlStruct *cvs){
+    cvs->actuator->message_array[15] = 1;
+    cvs->actuator->message_array[16] = 1;
 }
 
 void TapisStop(CtrlStruct *cvs){
-    cvs->actuator->message_array[12] = 0;
-    cvs->actuator->message_array[13] = 0;
+    cvs->actuator->message_array[15] = 0;
+    cvs->actuator->message_array[16] = 0;
 }
 
 void free_Actuator(CtrlStruct *cvs)

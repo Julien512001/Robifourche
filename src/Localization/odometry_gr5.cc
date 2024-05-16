@@ -66,14 +66,15 @@ void update_odometry(CtrlStruct *cvs)
 	w4 = cvs->inputs->wheel_speeds[W4];
 
 	
-	printf("w1 = %f, w2 = %f, w3 = %f, w4 = %f\n", w1, w2, w3, w4);
+	// printf("w1 = %f, w2 = %f, w3 = %f, w4 = %f\n", w1, w2, w3, w4);
 
 	vx_odo = 	(w1 + w2 + w3 + w4) * r/4.0;
 	vy_odo = 	(w1 - w2 - w3 + w4) * r/4.0;
 	omega_odo = (-w1 + w2 - w3 + w4) * r/0.7422;
 	
-
 	delta_t = t - cvs->odometry->last_t;
+
+	double theta = M_PI/180.0*cvs->odometry->theta;
 
 	vx_I = (- vx_odo*sin(omega_odo*delta_t) + vy_odo*cos(omega_odo*delta_t));
     vy_I = (vx_odo*cos(omega_odo*delta_t) + vy_odo*sin(omega_odo*delta_t));
@@ -81,7 +82,6 @@ void update_odometry(CtrlStruct *cvs)
  	cvs->odometry->x += vx_I*delta_t;
 	cvs->odometry->y += vy_I*delta_t;
 	cvs->odometry->theta +=  180.0/M_PI * omega_odo*delta_t;
-	//printf("%f, %f, %f, %f\n", w1, w2, w3, w4);
 
 	cvs->odometry->last_t = t;
  

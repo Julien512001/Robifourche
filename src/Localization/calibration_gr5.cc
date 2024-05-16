@@ -40,9 +40,8 @@ void calibration(CtrlStruct *cvs)
 
 		case CALIB_STATE_1: // first calibration state
 			beaconsCalibration(cvs);
-		
 			getPositionLidarCalib(cvs);
-		
+
 			cvs->odometry->x = cvs->lidar->x;
 			cvs->odometry->y = cvs->lidar->y;
 			cvs->odometry->theta = cvs->lidar->theta;

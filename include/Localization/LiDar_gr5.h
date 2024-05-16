@@ -74,6 +74,8 @@ typedef struct Lidar {
     double theta;
     double previous_x;
     double previous_y;
+    double rad_opp;
+    double ang_opp;
     double previous_theta;
 } Lidar;
 

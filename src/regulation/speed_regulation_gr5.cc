@@ -39,11 +39,14 @@ void speed_regulation(CtrlStruct *cvs, double vx, double vy, double omega)
 	omega2 = (vx + vy + 0.18555 * omega)/0.024;
 	omega3 = (vx + vy - 0.18555 * omega)/0.024;
 	omega4 = (vx - vy + 0.18555 * omega)/0.024;
-
+	
 	cvs->outputs->wheel_commands[W1] = omega1;
 	cvs->outputs->wheel_commands[W2] = omega2;
 	cvs->outputs->wheel_commands[W3] = omega3;
 	cvs->outputs->wheel_commands[W4] = omega4;
+
+	//printf("Ecriture \n");
+	//printf("w1 : %f\n w2 : %f\n w3 : %f\n w4 : %f\n", omega1, omega2, omega3, omega4);
 
 	//send_i2c(cvs, ADDR_FRONT, omega1, omega2);
 	//send_i2c(cvs, ADDR_REAR, omega3, omega4);

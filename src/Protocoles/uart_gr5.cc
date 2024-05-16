@@ -26,8 +26,6 @@ void* uart(void *arg)
 {
     CtrlStruct * cvs = (CtrlStruct*) arg;
 
-    double dataFrom_front1, dataFrom_front2;
-    double dataFrom_rear1, dataFrom_rear2;
     double dataTo_front1, dataTo_front2;
     double dataTo_rear1, dataTo_rear2;
 
@@ -39,10 +37,12 @@ void* uart(void *arg)
         
         char data_front[50];
         snprintf(data_front, sizeof(data_front), "%.2f %.2f\n", dataTo_front1, dataTo_front2);
+        // printf("Envoi avant \n");
         serWrite(cvs->uart->handle_front, data_front, strlen(data_front));
 
         char data_rear[50];
         snprintf(data_rear, sizeof(data_rear), "%.2f %.2f\n", dataTo_rear2, dataTo_rear1);
+        // printf("Envoi arrière \n");
         serWrite(cvs->uart->handle_rear, data_rear, strlen(data_rear));
         
 

@@ -23,6 +23,7 @@ FILE *fp3;
 FILE *fp4;
 FILE *fp5;
 FILE *fp6;
+FILE *fp7;
 
 FILE *fp_control; // File pointer for writing data for low level
 
@@ -54,6 +55,7 @@ int main(void) {
     fp4 = fopen("../data/opponent.txt", "w");
     fp5 = fopen("../data/positionlidar.txt", "w");
     fp6 = fopen("../data/positionOdometry.txt", "w");
+    fp7 = fopen("../data/speed.txt", "w");
 
     // GPIO init
     init_GPIO();
@@ -64,7 +66,7 @@ int main(void) {
 
     // Controller init
     cvs->robot_id = ROBOT_B;
-    cvs->startPosition = 1;
+    cvs->startPosition = 2;
     controller_init(cvs);
 
     // Init LCD
@@ -79,16 +81,14 @@ int main(void) {
 
     void* arg = (void*) cvs;
 
-    //pthread_create(&threadLidar, NULL, &lidar, arg);
-    pthread_create(&threadUart, NULL, &uart, arg);
-
-    sleep(1.0);
+    pthread_create(&threadLidar, NULL, &lidar, arg);
     cvs->calib->flag = 1;
+    
     calibration(cvs);
     
     while (inputs->StartSwitch == 0)
     {
-        startUp(cvs);  
+        startUp(cvs);
     }
 
     //TIME
@@ -96,33 +96,15 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &start);
     cvs->lidar->nbrOpponents = 1;
     
+    // Communication Thread
+    pthread_create(&threadUart, NULL, &uart, arg);
+    cvs->main_state = RUN_STATE;
     // control loop
-
     while (true)
     {
         clock_gettime(CLOCK_MONOTONIC, &end);
         cvs->inputs->t = (end.tv_sec - start.tv_sec) + (double) (end.tv_nsec - start.tv_nsec) / BILLION;
-        
-        // Graph Low Level
-
-        
-        fp_control = fopen("../Mercredi2.txt", "a");
-        if (fp_control == NULL) {
-          perror("Erreur lors de l'ouverture du fichier");
-          // Ou utilisez errno pour obtenir le code d'erreur spécifique
-          // printf("Erreur lors de l'ouverture du fichier : %d\n", errno);
-        }
-        else{
-          fprintf(fp_control,"control1 : %f, %f, %f\n", cvs->inputs->wheel_speeds[W2], cvs->outputs->wheel_commands[W2], cvs->inputs->t);
-          fclose(fp_control);
-        }
-
-        // Position
-        update_robotPosition(cvs);
-
         controller_loop(cvs);
-        //printf("w1: %f, w2: %f, w3: %f, w4: %f\n", cvs->inputs->wheel_speeds[W1], cvs->inputs->wheel_speeds[W2], cvs->inputs->wheel_speeds[W3],cvs->inputs->wheel_speeds[W4]);
-
 /*
         // time LCD
         if (i % 100 == 0){
@@ -132,7 +114,7 @@ int main(void) {
 */
 
         // Lidar position update
-        
+        /*
         double last_execution = 0.0;
         double timeUpdate = cvs->inputs->t - last_execution;
         if (timeUpdate >= 0.2){
@@ -141,7 +123,7 @@ int main(void) {
                 last_execution = cvs->inputs->t;
             }
         }
-
+        */
         // Stop for the end of the match
         if (cvs->inputs->t >= 90.0) {
             speed_regulation(cvs,-1,-1,-1);
@@ -164,36 +146,37 @@ int main(void) {
         */
 
 
+        
+        for (int i = 0; i < cvs->lidar->nbrCentroids; i++) {
+            fprintf(fp0, "%f, %f\n", cvs->lidar->myCentroids[i].radius, cvs->lidar->myCentroids[i].angle);
+        }
+        
         /*
-            for (int i = 0; i < cvs->lidar->nbrCentroids; i++) {
-                fprintf(fp0, "%f, %f\n", cvs->lidar->myCentroids[i].radius, cvs->lidar->myCentroids[i].angle);
-            }
-            */
-            /*
-            //printf("%d\n", cvs->lidar->nbrCentroids);
-            for (int i = 0; i < inputs->nb_lidar_data; i++) {
-                fprintf(fp1, "%f, %f\n", inputs->last_lidar_radius[i], inputs->last_lidar_angle[i]);
-            }
-            */
+        //printf("%d\n", cvs->lidar->nbrCentroids);
+        for (int i = 0; i < inputs->nb_lidar_data; i++) {
+            fprintf(fp1, "%f, %f\n", inputs->last_lidar_radius[i], inputs->last_lidar_angle[i]);
+        }
+        */
         /*
             fprintf(fp2, "%f, %f\n", cvs->lidar->beacons->beacon1.radius, cvs->lidar->beacons->beacon1.angle);
             fprintf(fp2, "%f, %f\n", cvs->lidar->beacons->beacon2.radius, cvs->lidar->beacons->beacon2.angle);
             fprintf(fp2, "%f, %f\n", cvs->lidar->beacons->beacon3.radius, cvs->lidar->beacons->beacon3.angle);
         */
         /*
-            printf("%f, %f\n", cvs->lidar->beacons->beacon1.radius, cvs->lidar->beacons->beacon1.angle);
-            printf("%f, %f\n", cvs->lidar->beacons->beacon2.radius, cvs->lidar->beacons->beacon2.angle);
-            printf("%f, %f\n", cvs->lidar->beacons->beacon3.radius, cvs->lidar->beacons->beacon3.angle);
+        printf("%f, %f\n", cvs->lidar->beacons->beacon1.radius, cvs->lidar->beacons->beacon1.angle);
+        printf("%f, %f\n", cvs->lidar->beacons->beacon2.radius, cvs->lidar->beacons->beacon2.angle);
+        printf("%f, %f\n", cvs->lidar->beacons->beacon3.radius, cvs->lidar->beacons->beacon3.angle);
         */
 
         //fprintf(fp3, "%f, %f, %f\n", cvs->rob_pos->x, cvs->rob_pos->y, cvs->rob_pos->theta);
         //fprintf(fp4, "%f, %f\n", cvs->opp_pos->x, cvs->opp_pos->y);
         //fprintf(fp5, "%f, %f, %f\n", cvs->lidar->x, cvs->lidar->y, cvs->lidar->theta);
         //fprintf(fp6, "%f, %f, %f\n", cvs->odometry->x, cvs->odometry->y, cvs->odometry->theta);
+        
     }
 
     pthread_join(threadLidar, NULL);
-    pthread_join(threadLidar, NULL);
+    pthread_join(threadUart, NULL);
 
 
     disconnectLidar(cvs->lidar->myLidar->lidar);
@@ -210,6 +193,8 @@ int main(void) {
     fclose(fp4);
     fclose(fp5);
     fclose(fp6);
+    fclose(fp7);
+
     
     return 0;
 }

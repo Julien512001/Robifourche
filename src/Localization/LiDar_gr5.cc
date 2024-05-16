@@ -34,18 +34,26 @@ void get_position(CtrlStruct *cvs)
 {
     getData(cvs);
     makeCluster(cvs);
-    
-    //bool state = updateMemory(cvs); 
-    
+
+    double dist = 100.0;
+    double angle;
+    for (int i = 0; i < cvs->lidar->nbrCentroids; i++) {
+        if (cvs->lidar->myCentroids[i].radius < dist)
+        {
+            dist = cvs->lidar->myCentroids[i].radius;
+            angle = cvs->lidar->myCentroids[i].angle;
+        }
+    }
+    cvs->lidar->rad_opp = dist;
+    cvs->lidar->ang_opp = angle;
+
+    /*
     Cartesian *guessBeacons = (Cartesian*) malloc(3*sizeof(Cartesian));
     guess(cvs, guessBeacons);
-    for (int i = 0; i < 3; i++) {
-        //printf("b[%d] : %f, %f\n", i+1, guessBeacons[i].x, guessBeacons[i].y);
-    }
     updateBeacons(cvs, guessBeacons);
-    
     ToTal(cvs);
     opponentTracking(cvs);
+    */
 }
 
 
@@ -115,40 +123,78 @@ void init_lidar(CtrlStruct *cvs)
 
 void beaconsCalibration(CtrlStruct *cvs)
 {
-    switch(cvs->startPosition){
-        case 1:
-            cvs->lidar->beacons->beacon1.angle = 224.516083;
-            cvs->lidar->beacons->beacon1.radius  = 0.384226;
-            cvs->lidar->beacons->beacon2.angle = 99.851601;
-            cvs->lidar->beacons->beacon2.radius  = 1.620000;
-            cvs->lidar->beacons->beacon3.angle = 11.752625;
-            cvs->lidar->beacons->beacon3.radius  = 2.980000;
-            //ctrl->lidar->beaconsTheta[3] = ;
-            //ctrl->lidar->beaconsDist[3]  = ;  
-            break;
+    if (cvs->robot_id == ROBOT_B) {
+        switch(cvs->startPosition){
+            case 1:
+                cvs->lidar->beacons->beacon1.angle = 224.516083;
+                cvs->lidar->beacons->beacon1.radius  = 0.384226;
+                cvs->lidar->beacons->beacon2.angle = 99.851601;
+                cvs->lidar->beacons->beacon2.radius  = 1.620000;
+                cvs->lidar->beacons->beacon3.angle = 11.752625;
+                cvs->lidar->beacons->beacon3.radius  = 2.980000;
+                //ctrl->lidar->beaconsTheta[3] = ;
+                //ctrl->lidar->beaconsDist[3]  = ;  
+                break;
 
-        case 2:
-            cvs->lidar->beacons->beacon1.angle = 258.299561;
-            cvs->lidar->beacons->beacon1.radius  = 1.659750;
-            cvs->lidar->beacons->beacon2.angle = 134.610458;
-            cvs->lidar->beacons->beacon2.radius  = 0.373588;
-            cvs->lidar->beacons->beacon3.angle = 345.908203;
-            cvs->lidar->beacons->beacon3.radius  = 2.962667;
-            break;
+            case 2:
+                cvs->lidar->beacons->beacon1.angle = 260.062866;
+                cvs->lidar->beacons->beacon1.radius  = 1.828857;
+                cvs->lidar->beacons->beacon2.angle = 163.404938;
+                cvs->lidar->beacons->beacon2.radius  = 0.291043;
+                cvs->lidar->beacons->beacon3.angle = 342.617798;
+                cvs->lidar->beacons->beacon3.radius  = 3.021333;
+                break;
 
-        case 3:
-            cvs->lidar->beacons->beacon1.angle = 17.340088;
-            cvs->lidar->beacons->beacon1.radius  = 3.033333;
-            cvs->lidar->beacons->beacon2.angle = 341.096191;
-            cvs->lidar->beacons->beacon2.radius  = 3.053333;
-            cvs->lidar->beacons->beacon3.angle = 179.607178;
-            cvs->lidar->beacons->beacon3.radius  = 0.266128;
-            break;
+            case 3:
+                cvs->lidar->beacons->beacon1.angle = 17.340088;
+                cvs->lidar->beacons->beacon1.radius  = 3.033333;
+                cvs->lidar->beacons->beacon2.angle = 341.096191;
+                cvs->lidar->beacons->beacon2.radius  = 3.053333;
+                cvs->lidar->beacons->beacon3.angle = 179.607178;
+                cvs->lidar->beacons->beacon3.radius  = 0.266128;
+                break;
 
-        default:
-            printf("positionRobot unknown \n");
-            break;
+            default:
+                printf("positionRobot unknown \n");
+                break;
+        }
+    } else {
+        switch(cvs->startPosition){
+            case 1:
+                cvs->lidar->beacons->beacon1.angle = 17.157679;
+                cvs->lidar->beacons->beacon1.radius  = 0.316460;
+                cvs->lidar->beacons->beacon2.angle = 281.039429;
+                cvs->lidar->beacons->beacon2.radius  = 1.825111;
+                cvs->lidar->beacons->beacon3.angle = 197.459473;
+                cvs->lidar->beacons->beacon3.radius  = 2.991200;
+                //ctrl->lidar->beaconsTheta[3] = ;
+                //ctrl->lidar->beaconsDist[3]  = ;
+                break;
+
+            case 2:
+                cvs->lidar->beacons->beacon1.angle = 258.299561;
+                cvs->lidar->beacons->beacon1.radius  = 1.659750;
+                cvs->lidar->beacons->beacon2.angle = 134.610458;
+                cvs->lidar->beacons->beacon2.radius  = 0.373588;
+                cvs->lidar->beacons->beacon3.angle = 345.908203;
+                cvs->lidar->beacons->beacon3.radius  = 2.962667;
+                break;
+
+            case 3:
+                cvs->lidar->beacons->beacon1.angle = 17.340088;
+                cvs->lidar->beacons->beacon1.radius  = 3.033333;
+                cvs->lidar->beacons->beacon2.angle = 341.096191;
+                cvs->lidar->beacons->beacon2.radius  = 3.053333;
+                cvs->lidar->beacons->beacon3.angle = 179.607178;
+                cvs->lidar->beacons->beacon3.radius  = 0.266128;
+                break;
+
+            default:
+                printf("positionRobot unknown \n");
+                break;
+        }
     }
+
 }
 
 
@@ -248,17 +294,11 @@ void makeCluster(CtrlStruct *cvs)
     //For the last cluster
     double centroidTheta = getCentroid(bufferTheta, countBuffer);
     double centroidDist = getCentroid(bufferDist, countBuffer);
-/*
-    bool stateTheta = getSTD(bufferTheta, countBuffer, centroidTheta, ERROR_THETA_STD);
-    bool stateDist = getSTD(bufferDist, countBuffer, centroidDist, ERROR_DIST_STD);
-
-    bool state = (stateTheta & stateDist) ? true : false;
-*/
     // De base : state = false puis on update state à true
-
-    bool state = false;
+    
+    bool state = true;
     if ((abs(lstCentroidDist[0]-centroidDist) < 0.1) && (abs(lstCentroidTheta[0]-centroidTheta) < 20.0)){
-        state = true;
+        state = false;
     }
 
     if (state) {
@@ -295,6 +335,7 @@ void makeCluster(CtrlStruct *cvs)
         free(bufferThetaFirstLast);
         free(bufferDistFirstLast);
     } 
+    
     lstCentroidTheta = (double*) realloc(lstCentroidTheta, countCentroid * sizeof(double));
     lstCentroidDist = (double*) realloc(lstCentroidDist, countCentroid * sizeof(double));
 
@@ -445,15 +486,10 @@ void ToTal(CtrlStruct *cvs) {
     double phi2;
     double phi3;
 
-    if (cvs->main_state == CALIB_STATE){
-        phi1 = 360.0 - cvs->lidar->beacons->beacon1.angle;
-        phi2 = 360.0 - cvs->lidar->beacons->beacon2.angle;
-        phi3 = 360.0 - cvs->lidar->beacons->beacon3.angle;
-    } else{
-        phi1 = 360.0 - cvs->lidar->beacons->beacon1.angle;
-        phi2 = 360.0 - cvs->lidar->beacons->beacon2.angle;
-        phi3 = 360.0 - cvs->lidar->beacons->beacon3.angle;
-    }
+    phi1 = 360.0 - cvs->lidar->beacons->beacon1.angle;
+    phi2 = 360.0 - cvs->lidar->beacons->beacon2.angle;
+    phi3 = 360.0 - cvs->lidar->beacons->beacon3.angle;
+
     double sinus12 = sin(M_PI/180.0 * (phi2 - phi1));
     double sinus23 = sin(M_PI/180.0 * (phi3 - phi2));
 
@@ -491,6 +527,7 @@ void ToTal(CtrlStruct *cvs) {
     xR = (x1 + k23 * (y31 - y12)/D);
     yR = (y1 + k23 * (x12 - x31)/D);
     ThetaR = 180.0/M_PI * atan2(y2 - yR, x2 - xR) - phi2;
+	printf("%f\n", ThetaR);
 
     cvs->lidar->x = xR;
     cvs->lidar->y = yR;
