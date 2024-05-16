@@ -48,7 +48,9 @@ void FSM_Take_Pot_v1(CtrlStruct *cvs);
 void FSM_Take_Pot_v2(CtrlStruct *cvs);
 
 // function prototype
-void main_strategy(CtrlStruct *cvs);
+void main_strategy_jaune(CtrlStruct *cvs);
+
+void main_strategy_bleu(CtrlStruct *cvs);
 
 void main_strategy_sonar(CtrlStruct *cvs);
 

@@ -45,8 +45,6 @@ int main(void) {
     outputs = (CtrlOut*) malloc(sizeof(CtrlOut));
     cvs = init_CtrlStruct(inputs, outputs);
     
-    speed_regulation(cvs, -1, -1, -1);
-
     //FILE init
     fp0 = fopen("../data/centroid.txt", "w");
     fp1 = fopen("../data/lidar.txt", "w");
@@ -82,10 +80,13 @@ int main(void) {
     void* arg = (void*) cvs;
 
     pthread_create(&threadLidar, NULL, &lidar, arg);
+    pthread_create(&threadUart, NULL, &uart, arg);
+
     cvs->calib->flag = 1;
     
     calibration(cvs);
-    
+    printf("calibration terminée\n");
+    sleep(1.0);
     while (inputs->StartSwitch == 0)
     {
         startUp(cvs);
@@ -96,16 +97,13 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &start);
     cvs->lidar->nbrOpponents = 1;
     
-    // Communication Thread
-    pthread_create(&threadUart, NULL, &uart, arg);
-    cvs->main_state = RUN_STATE;
     // control loop
     while (true)
     {
         clock_gettime(CLOCK_MONOTONIC, &end);
         cvs->inputs->t = (end.tv_sec - start.tv_sec) + (double) (end.tv_nsec - start.tv_nsec) / BILLION;
         controller_loop(cvs);
-/*
+/*  
         // time LCD
         if (i % 100 == 0){
             time(cvs->inputs->t);
@@ -144,9 +142,6 @@ int main(void) {
         printf("sonar3 : %f\n", cvs->inputs->sonars[3]);
         printf("sonar4 : %f\n", cvs->inputs->sonars[4]);
         */
-
-
-        
         for (int i = 0; i < cvs->lidar->nbrCentroids; i++) {
             fprintf(fp0, "%f, %f\n", cvs->lidar->myCentroids[i].radius, cvs->lidar->myCentroids[i].angle);
         }
@@ -172,7 +167,6 @@ int main(void) {
         //fprintf(fp4, "%f, %f\n", cvs->opp_pos->x, cvs->opp_pos->y);
         //fprintf(fp5, "%f, %f, %f\n", cvs->lidar->x, cvs->lidar->y, cvs->lidar->theta);
         //fprintf(fp6, "%f, %f, %f\n", cvs->odometry->x, cvs->odometry->y, cvs->odometry->theta);
-        
     }
 
     pthread_join(threadLidar, NULL);

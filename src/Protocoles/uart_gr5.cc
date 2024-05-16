@@ -14,7 +14,7 @@ void init_uart(CtrlStruct *cvs)
         return;
     }
     
-    cvs->uart->handle_rear = serOpen(ADDR_REAR, 115200, 0);
+    cvs->uart->handle_rear = serOpen(ADDR_REAR, 9600, 0);
     if (cvs->uart->handle_rear < 0)
     {
         fprintf(stderr, "Impossible d'ouvrir le port pour REAR\n");
@@ -36,28 +36,39 @@ void* uart(void *arg)
         dataTo_rear2  = cvs->outputs->wheel_commands[W4];
         
         char data_front[50];
-        snprintf(data_front, sizeof(data_front), "%.2f %.2f\n", dataTo_front1, dataTo_front2);
-        // printf("Envoi avant \n");
-        serWrite(cvs->uart->handle_front, data_front, strlen(data_front));
+        int ser;
 
-        char data_rear[50];
-        snprintf(data_rear, sizeof(data_rear), "%.2f %.2f\n", dataTo_rear2, dataTo_rear1);
-        // printf("Envoi arrière \n");
-        serWrite(cvs->uart->handle_rear, data_rear, strlen(data_rear));
         
-
+        snprintf(data_front, sizeof(data_front), "%f %f\n", dataTo_front1, dataTo_front2);
+        ser = serWrite(cvs->uart->handle_front, data_front, strlen(data_front));
+        if (ser != strlen(data_front)) {
+            //printf("erreur lors de l'envoie\n");
+        }
+        
+        
+        char data_rear[50];
+        printf("%f\n", dataTo_rear1);
+        snprintf(data_rear, sizeof(data_rear), "%f %f\n", dataTo_rear2, dataTo_rear1);
+        ser = serWrite(cvs->uart->handle_rear, data_rear, strlen(data_rear));
+        if (ser != strlen(data_front)) {
+            //printf("erreur lors de l'envoie\n");
+        }
+        
+       
         if (serDataAvailable(cvs->uart->handle_front) > 0)
         {
             char received_data_front[50];
             serRead(cvs->uart->handle_front, received_data_front, sizeof(received_data_front));
-            sscanf(received_data_front, "%lf %lf", &cvs->inputs->wheel_speeds[W1], &cvs->inputs->wheel_speeds[W2]);
+            sscanf(received_data_front, "%f %f", &cvs->inputs->wheel_speeds[W1], &cvs->inputs->wheel_speeds[W2]);
         }
-
+        
+        
+        
         if (serDataAvailable(cvs->uart->handle_rear) > 0)
         {
             char received_data_rear[50];
             serRead(cvs->uart->handle_rear, received_data_rear, sizeof(received_data_rear));
-            sscanf(received_data_rear, "%lf %lf", &cvs->inputs->wheel_speeds[W4], &cvs->inputs->wheel_speeds[W3]);
+            sscanf(received_data_rear, "%f %f", &cvs->inputs->wheel_speeds[W4], &cvs->inputs->wheel_speeds[W3]);
         }
     }
     

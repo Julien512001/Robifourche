@@ -201,7 +201,117 @@ void FSM_Take_Pot_v2(CtrlStruct *cvs){
 	RunActuators(cvs);
 }
 
-void main_strategy(CtrlStruct *cvs)
+void main_strategy_jaune(CtrlStruct *cvs)
+{
+	// variables declaration
+	Strategy *strat;
+	double t;
+	CtrlIn *inputs;
+
+	inputs = cvs->inputs;
+	t = inputs->t;
+	int time = round(t);
+	// variables initialization
+	strat = cvs->strat;
+
+	switch (strat->state)
+	{
+		case STRAT_STATE_1: // On se met en position panneau
+			DSSPanelMid(cvs);
+			DSSForkMid(cvs);
+			RunActuators(cvs);
+			sleep(0.5);
+			PanelBrasDown(cvs);
+			RunActuators(cvs);
+			if (t > 1.5){strat->state = STRAT_STATE_5;}
+			break;
+
+		case STRAT_STATE_2: // on utilise pas les état de 2 a 4
+			speed_regulation(cvs, -1, -1, -1);
+			sleep(1.73);
+			FSM_Do_Solar_panel(cvs);
+			strat->state = STRAT_STATE_3;
+
+			break;
+
+		case STRAT_STATE_3: 
+			speed_regulation(cvs, 0.2, -1, -1);
+			if (t > 15){strat->state = STRAT_STATE_4;}
+			break;
+
+		case STRAT_STATE_4: 
+			speed_regulation(cvs, -1, -1, -1);
+			sleep(1.73);
+			FSM_Do_Solar_panel(cvs);
+			break;
+		case STRAT_STATE_5: // On avance pour faire les 6 1er panneau
+			speed_regulation(cvs, -0.2, -1, -1);
+			if (t>11){
+				strat->state = STRAT_STATE_6;
+			}
+			break;
+
+		case STRAT_STATE_6:
+			speed_regulation(cvs, -1, -1, -1);
+			sleep(1.73); // on attend la commande d'arret des roues
+			PanelBrasUp(cvs);
+			RunActuators(cvs);
+			sleep(0.5);
+			DSSPanelUp(cvs);
+			RunActuators(cvs);
+			strat->state = STRAT_STATE_7;
+			//FSM_Do_Solar_panel(cvs);
+			break;
+
+		case STRAT_STATE_7:
+			speed_regulation(cvs, 0.2, -0.2, -1); // On va en diago en arrière
+			if (t > 15){strat->state = STRAT_STATE_8;}
+			break;
+
+		case STRAT_STATE_8:
+			speed_regulation(cvs, -1, -1, -1); // On s'arrete
+			sleep(1.73);
+			strat->state = STRAT_STATE_9;
+			//FSM_Do_Solar_panel(cvs);
+			break;
+
+		case STRAT_STATE_9: // On se prépare a prendre les plantes
+			EntonnoirOUT(cvs);
+			TapisIn(cvs);
+			EntonnoirBrasSeq(cvs);
+			RunActuators(cvs);
+			speed_regulation(cvs, -0.2, -1, -1); // On fonce dans les plantes
+			if (t>21){strat->state = STRAT_STATE_10;}
+			break;
+
+		case STRAT_STATE_10:
+			speed_regulation(cvs, -1, -1, -1); // On s'arrete pcq on a les plantes normalement
+			sleep(1.73);
+			EntonnoirIN(cvs); // On referme unp eu le bras
+			RunActuators(cvs);
+			sleep(0.5);
+			EntonnoirSTOP(cvs);
+			DSSForkDown(cvs); // On descend les fourche et en enfourche les plantes
+			ParralaxOut(cvs);
+			RunActuators(cvs);
+			sleep(10);
+			DSSForkUp(cvs); // On les lèves pour prépare la mise en jardinière
+			strat->state = STRAT_STATE_11;
+
+			//FSM_Do_Solar_panel(cvs);
+			break;
+
+		case STRAT_STATE_11:
+			speed_regulation(cvs, -1, -1, -1); 
+			TapisStop(cvs);
+			EntonnoirBrasMiddle(cvs);
+			EntonnoirIN(cvs);
+			RunActuators(cvs);
+			break;	
+	}
+}
+
+void main_strategy_bleu(CtrlStruct *cvs)
 {
 	// variables declaration
 	Strategy *strat;

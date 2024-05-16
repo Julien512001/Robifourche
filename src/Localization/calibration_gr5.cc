@@ -32,7 +32,7 @@ void calibration(CtrlStruct *cvs)
 	switch (calib->flag)
 	{	
 		case CALIB_START: // start calibration
-			speed_regulation(cvs, -1, -1, -1); // not moving
+			//speed_regulation(cvs, -1, -1, -1); // not moving
 
 			calib->flag = CALIB_STATE_1; // directly go to state CALIB_STATE_1
 			calib->t_flag = t; // save current time

@@ -75,23 +75,21 @@ void controller_loop(CtrlStruct *cvs)
         //EntonnoirIN(cvs);
         //ParralaxIn(cvs);
         //FeetechIn(cvs);
-        DSSForkMid(cvs);
+        //DSSForkMid(cvs);
         //EntonnoirIN(cvs);
 
-        RunActuators(cvs);
+        //RunActuators(cvs);
 
-        //main_strategy(cvs);
-        /*
+        //main_strategy_bleu(cvs);
+        
         if (Avoidance(cvs)) {
           printf("Opponent\n");
           speed_regulation(cvs, -1, -1, -1);
         } else {
-          //main_strategy(cvs);
-          //speed_regulation(cvs, 0.2, -1, -1);
-          ParralaxIn(cvs);
-          DSSForkMid(cvs);
+          if (cvs->robot_id == ROBOT_B) main_strategy_bleu;
+          if (cvs->robot_id == ROBOT_Y) main_strategy_jaune;
         }
-        */
+        
         break;
 
     case BACK_HOME_STATE:

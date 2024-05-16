@@ -446,15 +446,6 @@ void lostBeacons(CtrlStruct *cvs){
     double rad1 = sqrt((xBeacon1 - cvs->odometry->x)*(xBeacon1 - cvs->odometry->x) + (yBeacon1 - cvs->odometry->y)*(yBeacon1 - cvs->odometry->y));
     double rad2 = sqrt((xBeacon2 - cvs->odometry->x)*(xBeacon2 - cvs->odometry->x) + (yBeacon2 - cvs->odometry->y)*(yBeacon2 - cvs->odometry->y));
     double rad3 = sqrt((xBeacon3 - cvs->odometry->x)*(xBeacon3 - cvs->odometry->x) + (yBeacon3 - cvs->odometry->y)*(yBeacon3 - cvs->odometry->y));
-/*
-    printf("rad1:%f\n", rad1);
-    printf("rad2:%f\n", rad2);
-    printf("rad3:%f\n", rad3);
-
-    printf("phi1:%f\n", phi1);
-    printf("phi2:%f\n", phi2);
-    printf("phi3:%f\n", phi3);
-*/
 
     cvs->lidar->beacons->beacon1.angle = phi1;
     cvs->lidar->beacons->beacon2.angle = phi2;
@@ -527,7 +518,6 @@ void ToTal(CtrlStruct *cvs) {
     xR = (x1 + k23 * (y31 - y12)/D);
     yR = (y1 + k23 * (x12 - x31)/D);
     ThetaR = 180.0/M_PI * atan2(y2 - yR, x2 - xR) - phi2;
-	printf("%f\n", ThetaR);
 
     cvs->lidar->x = xR;
     cvs->lidar->y = yR;
